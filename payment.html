@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Page - Shoe Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    /* Custom CSS for Payment Page */
+    body {
+      background-color: #f3f4f6;
+      font-family: sans-serif;
+    }
+
+    .nav {
+      background-color: #2563eb;
+      padding: 1rem;
+      color: white;
+    }
+
+    .nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav .links a {
+      color: white;
+      text-decoration: none;
+      margin-right: 1.5rem;
+    }
+
+    .nav .links a:hover {
+      color: #e5e7eb;
+    }
+
+    .payment-section {
+      max-width: 800px;
+      margin: 4rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-section h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Style to display logos in one column */
+    .payment-options {
+      display: flex;
+      flex-direction: column; /* Stack payment options vertically */
+      gap: 1rem; /* Space between options */
+    }
+
+    .payment-option {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .payment-option:last-child {
+      border-bottom: none;
+    }
+
+    .payment-option input[type="radio"] {
+      margin-right: 1rem;
+    }
+
+    .payment-option img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+
+    .payment-method {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .payment-method p {
+      color: #6b7280;
+    }
+
+    .total-section {
+      padding: 2rem 0;
+      border-top: 1px solid #e5e7eb;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .total-section p {
+      margin: 0.5rem 0;
+    }
+
+    .pay-button {
+      background-color: #2563eb;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 9999px;
+      font-size: 1.25rem;
+      width: 100%;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .pay-button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .footer {
+      background-color: #2563eb;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer p {
+      margin: 0;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav">
+    <div class="container">
+      <div class="logo">Shoe Store</div>
+      <div class="links">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Payment Section -->
+  <section class="payment-section">
+    <h2>Choose Your Payment Method</h2>
+
+    <!-- Payment Options in Column -->
+    <div class="payment-options">
+      <!-- Payment Option: PhonePay -->
+      <div class="payment-option">
+        <input type="radio" id="phonepay" name="payment-method" value="phonepay" checked>
+        <img src="pp.png" alt="PhonePay">
+        <div>
+          <div class="payment-method">PhonePay</div>
+          <p>Pay via PhonePay using UPI or linked bank account</p>
+        </div>
+      </div>
+
+      <!-- Payment Option: Google Pay -->
+      <div class="payment-option">
+        <input type="radio" id="googlepay" name="payment-method" value="googlepay">
+        <img src="gp.png" alt="Google Pay">
+        <div>
+          <div class="payment-method">Google Pay</div>
+          <p>Pay via Google Pay using UPI or linked bank account</p>
+        </div>
+      </div>
+
+      <!-- Payment Option: Net Banking -->
+      <div class="payment-option">
+        <input type="radio" id="netbanking" name="payment-method" value="netbanking">
+        <img src="nb.png" alt="Net Banking">
+        <div>
+          <div class="payment-method">Net Banking</div>
+          <p>Pay via your preferred net banking option</p>
+        </div>
+      </div>
+
+      <!-- Payment Option: Cash on Delivery -->
+      <div class="payment-option">
+        <input type="radio" id="cod" name="payment-method" value="cod">
+        <img src="cod.png" alt="Cash on Delivery">
+        <div>
+          <div class="payment-method">Cash on Delivery</div>
+          <p>Pay in cash when your order is delivered</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Section -->
+    <div class="total-section">
+      <p><strong>Total Amount: </strong><span id="total-amount">0</span></p>
+      <button class="pay-button" onclick="confirmPayment()">Confirm and Pay</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Shoe Store. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Calculate total amount (assume it's passed from the cart page)
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let totalAmount = 0;
+
+    cart.forEach(item => {
+      totalAmount += item.price;
+    });
+
+    document.getElementById('total-amount').textContent = totalAmount;
+
+    async function confirmPayment() {
+      const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+      if (!selectedPaymentMethod) {
+        alert('Please select a payment method before proceeding.');
+        return;
+      }
+
+      // Call the backend to create a payment intent with Stripe
+      const response = await fetch('/pay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentMethod: selectedPaymentMethod, amount: totalAmount }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert('Payment failed: ' + data.error);
+        return;
+      }
+
+      // Use Stripe to confirm the payment
+      const stripe = Stripe('your-public-stripe-key');  // Replace with your actual Stripe public key
+      const { clientSecret } = data;
+
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: selectedPaymentMethod,
+      });
+
+      if (result.error) {
+        alert('Payment failed: ' + result.error.message);
+      } else {
+        alert('Payment successful!');
+        // Redirect to confirmation page or show a success message
+      }
+    }
+  </script>
+</body>
+</html>
