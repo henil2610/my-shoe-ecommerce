@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Shoe Store</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      border-radius: 20%;
+    }
+
+    .login-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    
+    }
+
+    .login-container h2 {
+      margin-bottom: 1rem;
+    }
+
+    .input-field {
+      width: 80%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border-radius: 0.25rem;
+      border: 1px solid #ccc;
+    }
+
+    .login-button {
+      width: 88%;
+      padding: 0.75rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .login-button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .social-login-buttons {
+      margin-top: 1.5rem;
+    }
+
+    .google-login, .facebook-login {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border-radius: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .google-login {
+      background-color: white;
+      color: black;
+    }
+
+    .google-login:hover {
+      background-color: #c1351d;
+    }
+
+    .facebook-login {
+      background-color: white;
+      color: black;
+    }
+
+    .facebook-login:hover {
+      background-color: #2d4373;
+    }
+
+    .social-login-buttons img {
+      width: 20px;
+      margin-right: 10px;
+    }
+
+    .footer {
+      background-color: #2563eb;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      
+    }
+
+    .footer a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login to Shoe Store</h2>
+
+    <!-- Email and Password Login Form -->
+    <form id="login-form">
+      <input type="email" class="input-field" placeholder="Email" required id="email">
+      <input type="password" class="input-field" placeholder="Password" required id="password">
+      <button type="submit" class="login-button">Login</button>
+    </form>
+
+    <!-- Social Login Buttons -->
+    <div class="social-login-buttons">
+      <button class="google-login" aria-label="Log in with Google">
+        <img src="google.png" alt="Google Logo">
+        Log in with Google
+      </button>
+      <button class="facebook-login" aria-label="Log in with Facebook">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo">
+        Log in with Facebook
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>&copy; 2025 Shoe Store. All rights reserved.</p>
+    <div>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Get the input values
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Simple validation (enhance as needed)
+      if (email && password) {
+        // Store the user session (simple session storage for demo)
+        sessionStorage.setItem('userLoggedIn', 'true');
+        
+        // Redirect to homepage (index.html)
+        window.location.href = 'index.html'; 
+      } else {
+        alert("Please enter both email and password.");
+      }
+    });
+
+    // Social login buttons (these are placeholders)
+    document.querySelector('.google-login').addEventListener('click', function() {
+      alert('Google login clicked');
+    });
+
+    document.querySelector('.facebook-login').addEventListener('click', function() {
+      alert('Facebook login clicked');
+    });
+  </script>
+</body>
+</html>
