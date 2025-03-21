@@ -36,6 +36,7 @@
         .cart-item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 15px;
             background: #fff;
             border-radius: 5px;
@@ -109,17 +110,33 @@
                 align-items: center;
             }
             .cart-item {
-                flex-direction: column;
-                text-align: center;
+                flex-direction: row; /* Keep details beside the image */
+                align-items: center;
+                justify-content: space-between;
+                text-align: left;
                 padding: 10px;
             }
             .cart-item img {
-                width: 100%;
-                max-width: 200px;
-                margin-bottom: 10px;
+                width: 70px; /* Reduce image size */
+                height: auto;
+                margin-right: 10px;
             }
             .cart-item-details {
-                text-align: center;
+                flex-grow: 1;
+                text-align: left;
+                font-size: 14px;
+            }
+            .cart-item button {
+                padding: 5px 10px;
+                font-size: 14px;
+            }
+            .summary-section {
+                width: 100%;
+            }
+            .confirm-btn {
+                max-width: 250px;
+                margin: auto;
+                display: block;
             }
         }
     </style>
