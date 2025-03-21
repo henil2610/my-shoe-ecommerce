@@ -63,8 +63,6 @@
         button:hover {
             background: #c9302c;
         }
-        
-        /* Right Section */
         .summary-section {
             flex: 1;
             background: white;
@@ -92,8 +90,6 @@
         .confirm-btn:hover {
             background: #2362c7;
         }
-
-        /* Payment Methods */
         .payment-methods {
             text-align: center;
             margin-top: 15px;
@@ -102,33 +98,22 @@
             width: 50px;
             margin: 5px;
         }
-
-        /* 🔹 RESPONSIVE STYLES */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 align-items: center;
             }
             .cart-item {
-                flex-direction: row; /* Keep details beside the image */
+                flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
                 text-align: left;
                 padding: 10px;
             }
             .cart-item img {
-                width: 70px; /* Reduce image size */
+                width: 70px;
                 height: auto;
                 margin-right: 10px;
-            }
-            .cart-item-details {
-                flex-grow: 1;
-                text-align: left;
-                font-size: 14px;
-            }
-            .cart-item button {
-                padding: 5px 10px;
-                font-size: 14px;
             }
             .summary-section {
                 width: 100%;
@@ -142,16 +127,11 @@
     </style>
 </head>
 <body>
-
     <h1>Your Cart</h1>
     <div class="container">
-        
-        <!-- Cart Items Section -->
         <div class="cart-section">
             <div class="cart-items"></div>
         </div>
-
-        <!-- Order Summary Section -->
         <div class="summary-section">
             <h2>Order Summary</h2>
             <div class="summary-details">
@@ -163,26 +143,14 @@
                 <p><strong>Total: <span id="totalAmount">$0</span></strong></p>
             </div>
             <button class="confirm-btn" onclick="confirmOrder()">Confirm Order</button>
-
-            <!-- Payment Methods -->
-            <div class="payment-methods">
-                <p>We Accept:</p>
-                <img src="Visa.svg" alt="Visa">
-                <img src="mastercard.png" alt="MasterCard">                
-                <img src="gp.png" alt="Google Pay">
-                <img src="pp.png" alt="PhonePe">
-            </div>
         </div>
-
     </div>
-
     <script>
         function displayCart() {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
             let cartItemsContainer = document.querySelector(".cart-items");
             cartItemsContainer.innerHTML = "";
             let subtotal = 0;
-
             cart.forEach((item, index) => {
                 let cartItem = document.createElement("div");
                 cartItem.classList.add("cart-item");
@@ -191,43 +159,36 @@
                     <div class="cart-item-details">
                         <p><strong>${item.name}</strong></p>
                         <p>Size: ${item.size}</p>
-                        <p>Price: $${item.price}</p>
+                        <p>Price: $${item.price.toFixed(2)}</p>
                     </div>
                     <button onclick="removeItem(${index})">Remove</button>
                 `;
                 cartItemsContainer.appendChild(cartItem);
                 subtotal += item.price;
             });
-
             updateSummary(subtotal);
         }
-
         function updateSummary(subtotal) {
-            let discount = subtotal * 0.10; // 10% Discount
-            let gst = subtotal * 0.05; // 5% GST
-            let cgst = subtotal * 0.05; // 5% CGST
+            let discount = subtotal * 0.10;
+            let gst = subtotal * 0.05;
+            let cgst = subtotal * 0.05;
             let total = subtotal - discount + gst + cgst;
-
             document.getElementById("subtotal").innerText = "$" + subtotal.toFixed(2);
             document.getElementById("discount").innerText = "-$" + discount.toFixed(2);
             document.getElementById("gst").innerText = "$" + gst.toFixed(2);
             document.getElementById("cgst").innerText = "$" + cgst.toFixed(2);
             document.getElementById("totalAmount").innerText = "$" + total.toFixed(2);
         }
-
         function removeItem(index) {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
             cart.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cart));
             displayCart();
         }
-
         function confirmOrder() {
-            window.location.href = "confirmation.html"; // Redirects to confirmation page
+            window.location.href = "confirmation.html";
         }
-
         window.onload = displayCart;
     </script>
-
 </body>
 </html>
