@@ -59,6 +59,23 @@
         .continue-btn:hover {
             background: #218838;
         }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .order-item img {
+                width: 100%;
+                max-width: 150px;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -87,7 +104,7 @@
 
         if (cartData.length > 0) {
             cartData.forEach(item => {
-                total += item.price * item.quantity;
+                total += item.price;
 
                 const orderItem = document.createElement("div");
                 orderItem.classList.add("order-item");
@@ -96,8 +113,7 @@
                     <div>
                         <p><strong>${item.name}</strong></p>
                         <p>Size: ${item.size}</p>
-                        <p>Quantity: ${item.quantity}</p>
-                        <p>Price: $${(item.price * item.quantity).toFixed(2)}</p>
+                        <p>Price: $${item.price.toFixed(2)}</p>
                     </div>
                 `;
                 orderItemsContainer.appendChild(orderItem);
