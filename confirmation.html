@@ -33,12 +33,18 @@
             align-items: center;
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
+            gap: 10px; /* Space between image and text */
+            flex-wrap: nowrap; /* Ensures side-by-side layout */
         }
         .order-item img {
-            width: 70px;
-            height: 70px;
+            width: 100px;  /* Medium size for both desktop & mobile */
+            height: auto;
             border-radius: 5px;
-            margin-right: 15px;
+            flex-shrink: 0; /* Prevents shrinking */
+        }
+        .order-text {
+            flex: 1; /* Fills remaining space */
+            font-size: 16px;
         }
         .total {
             font-size: 18px;
@@ -67,13 +73,14 @@
                 padding: 15px;
             }
             .order-item {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-wrap: nowrap; /* Ensures side-by-side layout */
+                gap: 8px; /* Smaller gap for mobile */
             }
             .order-item img {
-                width: 100%;
-                max-width: 150px;
-                margin-bottom: 10px;
+                width: 80px; /* Slightly smaller on mobile */
+            }
+            .order-text {
+                font-size: 14px;
             }
         }
     </style>
@@ -110,7 +117,7 @@
                 orderItem.classList.add("order-item");
                 orderItem.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
-                    <div>
+                    <div class="order-text">
                         <p><strong>${item.name}</strong></p>
                         <p>Size: ${item.size}</p>
                         <p>Price: $${item.price.toFixed(2)}</p>
