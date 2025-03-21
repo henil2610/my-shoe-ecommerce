@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoe Store</title>
+  <style>
+    /* Custom CSS */
+    body {
+      background-color: #f3f4f6;
+      font-family: sans-serif;
+    }
+
+    .nav {
+      background-color: #2563eb;
+      padding: 1rem;
+      color: white;
+    }
+
+    .nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav .links a {
+      color: white;
+      text-decoration: none;
+      margin-right: 1.5rem;
+    }
+    
+
+    .nav .links a:hover {
+      color: #e5e7eb;
+    }
+
+    .nav .cart-icon {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .nav .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    .hero {
+      background-color: #3b82f6;
+      color: white;
+      padding: 4rem 0;
+      text-align: center;
+     
+      height: 200px;
+      
+    }
+
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero .btn {
+      background-color: white;
+      color: #2563eb;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 1.25rem;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .hero .btn:hover {
+      background-color: #e5e7eb;
+    }
+
+    .shop {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 0;
+    }
+
+    .shop h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .shoe-card {
+      background-color: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .shoe-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .shoe-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .shoe-card .details {
+      padding: 1rem;
+    }
+
+    .shoe-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .shoe-card p {
+      color: #6b7280;
+    }
+
+    .shoe-card select {
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+    }
+
+    .shoe-card button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .shoe-card button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .cart-modal.open {
+      transform: translateX(0);
+    }
+
+    .cart-modal .cart-header {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-modal .cart-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .cart-modal .cart-header button {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-modal .cart-items {
+      padding: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .cart-modal .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .cart-modal .cart-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+
+    .cart-modal .cart-item .details {
+      flex-grow: 1;
+      padding-left: 1rem;
+    }
+
+    .cart-modal .cart-item h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .cart-modal .cart-item p {
+      margin: 0;
+      color: #6b7280;
+    }
+
+    .cart-modal .cart-total {
+      padding: 1rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .cart-modal .cart-buttons {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cart-modal .cart-buttons button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-modal .cart-buttons button:hover {
+      background-color: #1d4ed8;
+    }
+    .footer {
+  background-color: #1f2937;
+  color: white;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 1rem;
+  position: relative;
+}
+
+.footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.footer .social-icons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer .social-icons a {
+  color: white;
+  font-size: 1.25rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+  color: #3b82f6;
+}
+
+.footer .footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer .footer-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-right: 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer .footer-links a:hover {
+  color: #3b82f6;
+}
+
+.footer .footer-text {
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .footer .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer .social-icons {
+    margin-top: 1rem;
+  }
+
+  .footer .footer-links {
+    margin-top: 1rem;
+  }
+}
+
+svg{
+  width: 30px;
+  height: 30px;
+  
+}
+
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav">
+    <div class="container">
+      <div class="logo">Shoe Vault</div>
+      <div class="links">
+        <a href="#home" tabindex="1">Home</a>
+        <a href="#shop" tabindex="2">Shop</a>
+        <a href="#contact" tabindex="3">Contact</a>
+      </div>
+      <div class="cart-icon" onclick="toggleCartModal()" tabindex="4" aria-label="Open cart">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      
+      <h1>Find Your Perfect Pair of Shoes</h1>
+      <p>Vault of Timeless Footwear</p>
+      <a href="#shop" class="btn" tabindex="5">Shop Now</a>
+    </div>
+  </section>
+
+  <!-- Shoe Display Section -->
+  <section id="shop" class="shop">
+    <h2>Our Collection</h2>
+    <div class="grid">
+      <!-- Shoe Item 1 -->
+      <div class="shoe-card">
+        <img src="1.jpg.jpg" alt="Torrun-Grey Combi">
+        <div class="details">
+          <h3>Torrun-Grey Combi</h3>
+          <p>Price: $120</p>
+          <select id="size1">
+            <option value="10">Size 10</option>
+            <option value="11">Size 11</option>
+            <option value="12">Size 12</option>
+          </select>
+          <button onclick="addToCart('Torrun-Grey Combi', 120, '1.jpg.jpg', document.getElementById('size1').value)" aria-label="Add Torrun-Grey Combi to cart">Add to Cart</button>
+        </div>
+      </div>
+      <!-- Shoe Item 2 -->
+      <div class="shoe-card">
+        <img src="2.jpg.jpg" alt="Torrun Colourblock">
+        <div class="details">
+          <h3>Torrun Colourblock </h3>
+          <p>Price: $140</p>
+          <select id="size2">
+            <option value="9">Size 9</option>
+            <option value="10">Size 10</option>
+            <option value="11">Size 11</option>
+          </select>
+          <button onclick="addToCart('Torrun Colourblock', 140, '2.jpg.jpg', document.getElementById('size2').value)" aria-label="Add Torrun Colourblock to cart">Add to Cart</button>
+        </div>
+      </div>
+      <!-- Shoe Item 3 -->
+      <div class="shoe-card">
+        <img src="3.jpg.jpg" alt="Torrun Brown">
+        <div class="details">
+          <h3>Torrun Brown</h3>
+          <p>Price: $100</p>
+          <select id="size3">
+            <option value="8">Size 8</option>
+            <option value="9">Size 9</option>
+            <option value="10">Size 10</option>
+          </select>
+          <button onclick="addToCart('Torrun Brown', 100, '3.jpg.jpg', document.getElementById('size3').value)" aria-label="Add Torrun Brown cart">Add to Cart</button>
+        </div>
+      </div>
+      <!-- Shoe Item 4 -->
+      <div class="shoe-card">
+        <img src="4.jpg.jpg" alt="Torrun white">
+        <div class="details">
+          <h3>Torrun white</h3>
+          <p>Price: $90</p>
+          <select id="size4">
+            <option value="7">Size 7</option>
+            <option value="8">Size 8</option>
+            <option value="9">Size 9</option>
+          </select>
+          <button onclick="addToCart('Torrun white', 90, '4.jpg.jpg', document.getElementById('size4').value)" aria-label="Add Torrun white to cart">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Shoe Item 5 -->
+<div class="shoe-card">
+  <img src="5.jpg.jpg" alt="Torrun Green">
+  <div class="details">
+    <h3>Torrun Green</h3>
+    <p>Price: $160</p>
+    <select id="size5">
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+      <option value="12">Size 12</option>
+    </select>
+    <button onclick="addToCart('Torrun Green', 160, '5.jpg.jpg', document.getElementById('size5').value)" aria-label="Add Torrun Green to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 6 -->
+<div class="shoe-card">
+  <img src="6.jpg.jpg" alt="Aurous Magnum">
+  <div class="details">
+    <h3>Aurous Magnum</h3>
+    <p>Price: $110</p>
+    <select id="size6">
+      <option value="9">Size 9</option>
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+    </select>
+    <button onclick="addToCart('Aurous Magnum', 110, '6.jpg.jpg', document.getElementById('size6').value)" aria-label="Add Aurous Magnum to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 7 -->
+<div class="shoe-card">
+  <img src="7.jpg.jpg" alt="New Balance 990">
+  <div class="details">
+    <h3>New Balance 990</h3>
+    <p>Price: $160</p>
+    <select id="size">
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+      <option value="12">Size 12</option>
+    </select>
+    <button onclick="addToCart('New Balance 990', 160, '7.jpg.jpg', document.getElementById('size7').value)" aria-label="Add New Balance 990 to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 8 -->
+<div class="shoe-card">
+  <img src="8.jpg.jpg" alt="Nike Air Force 1">
+  <div class="details">
+    <h3>Nike Air Force 1</h3>
+    <p>Price: $110</p>
+    <select id="size8">
+      <option value="9">Size 9</option>
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+    </select>
+    <button onclick="addToCart('Nike Air Force 1', 110, '8.jpg.jpg', document.getElementById('size8').value)" aria-label="Add Nike Air Force 1 to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 9 -->
+<div class="shoe-card">
+  <img src="9.jpg.jpg" alt="New Balance 990">
+  <div class="details">
+    <h3>New Balance 990</h3>
+    <p>Price: $160</p>
+    <select id="size9">
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+      <option value="12">Size 12</option>
+    </select>
+    <button onclick="addToCart('New Balance 990', 160, '9.jpg.jpg', document.getElementById('size9').value)" aria-label="Add New Balance 990 to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 10 -->
+<div class="shoe-card">
+  <img src="10.jpg.jpg" alt="Nike Air Force 1">
+  <div class="details">
+    <h3>Nike Air Force 1</h3>
+    <p>Price: $110</p>
+    <select id="size10">
+      <option value="9">Size 9</option>
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+    </select>
+    <button onclick="addToCart('Nike Air Force 1', 110, '10.jpg.jpg', document.getElementById('size10').value)" aria-label="Add Nike Air Force 1 to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 11 -->
+<div class="shoe-card">
+  <img src="11.jpg.jpg" alt="New Balance 990">
+  <div class="details">
+    <h3>New Balance 990</h3>
+    <p>Price: $160</p>
+    <select id="size11">
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+      <option value="12">Size 12</option>
+    </select>
+    <button onclick="addToCart('New Balance 990', 160, '11.jpg.jpg', document.getElementById('size11').value)" aria-label="Add New Balance 990 to cart">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shoe Item 12 -->
+<div class="shoe-card">
+  <img src="12.jpg.jpg" alt="Nike Air Force 1">
+  <div class="details">
+    <h3>Nike Air Force 1</h3>
+    <p>Price: $110</p>
+    <select id="size12">
+      <option value="9">Size 9</option>
+      <option value="10">Size 10</option>
+      <option value="11">Size 11</option>
+    </select>
+    <button onclick="addToCart('Nike Air Force 1', 110, '12.jpg.jpg', document.getElementById('size12').value)" aria-label="Add Nike Air Force 1 to cart">Add to Cart</button>
+  </div>
+</div>
+
+
+
+    </div>
+  </section>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button onclick="toggleCartModal()" aria-label="Close cart">×</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-total">
+      Total: $<span id="cart-total">0</span>
+    </div>
+    <div class="cart-buttons">
+      <button onclick="goToPaymentPage()" aria-label="Proceed to payment">confirm order</button>
+    </div>
+  </div>
+
+   <!-- Footer -->
+   <footer class="footer">
+    <div class="container">
+      <div class="logo">Shoe Store</div>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-text">
+      <p>&copy; 2025 Shoe Store. All rights reserved.</p>
+    </div>
+  </footer>
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = 0;
+
+    function addToCart(name, price, image, size) {
+      cart.push({ name, price, image, size });
+      localStorage.setItem('cart', JSON.stringify(cart));  
+      updateCart();     
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      const cartCount = document.getElementById('cart-count');
+
+      cartItems.innerHTML = '';
+      total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="details">
+              <h3>${item.name}</h3>
+              <p>${item.size} - $${item.price}</p>
+            </div>
+            <button onclick="removeFromCart(${index})" aria-label="Remove ${item.name} from cart">×</button>
+          </div>
+        `;
+      });
+
+      cartTotal.textContent = total;
+      cartCount.textContent = cart.length;
+    }
+
+    function removeFromCart(index) {
+      if (confirm("Are you sure you want to remove this item?")) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+      }
+    }
+
+    function toggleCartModal() {
+      const cartModal = document.getElementById('cart-modal');
+      cartModal.classList.toggle('open');
+    }
+
+    function goToPaymentPage() {
+      window.location.href = 'cart.html';  // Redirect to payment page
+    }
+
+    window.onload = updateCart;
+  </script>
+</body>
+</html>

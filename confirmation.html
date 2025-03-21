@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .success-message {
+            color: green;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .order-details {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .order-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .order-item img {
+            width: 70px;
+            height: 70px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .continue-btn {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .continue-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="success-message">🎉 Your Order Has Been Placed Successfully!</h2>
+        <p>Thank you for shopping with us. Your order will be delivered soon.</p>
+        
+        <div class="order-details">
+            <h3>Order Summary:</h3>
+            <div id="order-items"></div>
+            <p class="total" id="total-price"></p>
+        </div>
+
+        <a href="home.html" class="continue-btn">Continue Shopping</a>
+    </div>
+
+    <script>
+        // Retrieve order data from localStorage
+        const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+
+        const orderItemsContainer = document.getElementById("order-items");
+        const totalPriceElement = document.getElementById("total-price");
+
+        let total = 0;
+
+        if (cartData.length > 0) {
+            cartData.forEach(item => {
+                total += item.price * item.quantity;
+
+                const orderItem = document.createElement("div");
+                orderItem.classList.add("order-item");
+                orderItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div>
+                        <p><strong>${item.name}</strong></p>
+                        <p>Size: ${item.size}</p>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p>Price: $${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                `;
+                orderItemsContainer.appendChild(orderItem);
+            });
+
+            totalPriceElement.textContent = `Total Price: $${total.toFixed(2)}`;
+        } else {
+            orderItemsContainer.innerHTML = "<p>No items found in your order.</p>";
+            totalPriceElement.textContent = "";
+        }
+
+        // Clear cart after placing the order
+        localStorage.removeItem("cart");
+    </script>
+
+</body>
+</html>
